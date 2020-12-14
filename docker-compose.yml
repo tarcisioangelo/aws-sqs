@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  goaws: 
+    image: pafortin/goaws
+    container_name: goaws
+    ports: 
+      - 4100:4100
+    environment:
+      - AWS_ACCESS_KEY_ID=AKIAJJA7MC5ZIJY4ZMLQ
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_DEFAULT_REGION=us-east-2
+      - AWS_DEFAULT_OUTPUT=json

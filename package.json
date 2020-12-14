@@ -1,0 +1,16 @@
+{
+  "name": "local-aws",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "tarcisio <tarcisio.angelo@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "sub": "node ./src/subscribe",
+    "send": "node ./src/send.js"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.809.0",
+    "dotenv": "^8.2.0",
+    "sqs-consumer": "^5.5.0"
+  }
+}
