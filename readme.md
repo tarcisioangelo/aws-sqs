@@ -1,4 +1,5 @@
 # GOAWS
+- cp .env.example .env
 - docker-compose up -d
 
 # Comandos
