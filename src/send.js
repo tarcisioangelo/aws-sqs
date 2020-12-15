@@ -1,37 +1,23 @@
 require('dotenv').config()
 
-const AWS = require('aws-sdk')
+const  { sendMessageFifo } = require('./messages')
 
-AWS.config.update({
-  accessKeyId: process.env.ACCESS_KEY_ID, 
-  secretAccessKey: process.env.SECRET_ACCESS_KEY, 
-  region: process.env.REGION 
-})
+const service = 'logger'
 
-const QueueUrl = process.env.QUEUE_URL
+const attributes = [
+  { name: 'id', value: 1 },
+  { name: 'title', value: 'Erro na consulta do banco de dados' }
+]
 
-const sqs = new AWS.SQS({ apiVersion: process.env.API_VERSION })
+const message = 'Error no serviço X'
 
-const idMessage = Date.now() + Math.random()
-
-const params = {
-  QueueUrl,
-  // DelaySeconds: 10, // Remove DelaySeconds parameter and value for FIFO queues
-  MessageAttributes: {
-    "title": {
-      DataType: "String",
-      StringValue: "Enviando mensagens com AWS SQS"
-    }
-  },
-  MessageBody: 'Corpo da mensagem, cuidado com o limite máximo de 256k',
-  MessageDeduplicationId: String(idMessage),  // Required for FIFO queues
-  MessageGroupId: "SQSIdTest",  // Required for FIFO queues
+async function send() {
+  try {
+    const idMessage = await sendMessageFifo(service, attributes, message)
+    console.log('Mensagem enviada, id: ' + idMessage)
+  } catch (error) {
+    console.log(error.message)  
+  }
 }
 
-sqs.sendMessage(params, function(err, data) {
-  if (err) {
-    console.log("Error", err)
-  } else {
-    console.log("Success", data.MessageId)
-  }
-})
+send()

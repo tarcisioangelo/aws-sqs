@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "sub": "node ./src/subscribe",
+    "receive": "node ./src/receive",
     "send": "node ./src/send.js"
   },
   "dependencies": {
