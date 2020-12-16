@@ -2,11 +2,11 @@ require('dotenv').config()
 
 const  { subscribeMessage } = require('./messages')
 
-const service = 'logger'
+const service = ['logger','user-logger']
 
 const attributes = ['id', 'title']
 
-subscribeMessage(service, attributes, handleMessage)
+subscribeMessage(service[1], attributes, handleMessage)
 
 async function handleMessage(message) {
   try {

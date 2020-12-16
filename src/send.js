@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const  { sendMessageFifo } = require('./messages')
 
-const service = 'logger'
+const service = 'user-logger'
 
 const attributes = [
   { name: 'id', value: 1 },

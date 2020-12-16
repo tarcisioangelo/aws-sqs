@@ -16,7 +16,8 @@ function subscribeMessage(service, attributes = [], callback) {
     queueUrl, 
     handleMessage: callback, 
     messageAttributeNames: attributes,
-    sqs: new AWS.SQS()
+    sqs: new AWS.SQS({ apiVersion: process.env.API_VERSION })
+
   })
     
   app.on('error', (error) => console.error(error.message))
