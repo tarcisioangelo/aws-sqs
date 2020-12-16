@@ -5,18 +5,22 @@ const  { sendMessageFifo } = require('./messages')
 const service = 'user-logger'
 
 const attributes = [
-  { name: 'id', value: 1 },
-  { name: 'title', value: 'Erro na consulta do banco de dados' }
+  { n:'id', v: 1 },
+  { n:'service', v: 'logger' },
+  { n:'user', v: 3 },
+  { n:'url', v: '2434234.234324.234324.jpg' },
+  { n:'user', v: 'S' },
+  { n:'teste', v: 'N' },
 ]
 
-const message = 'Error no serviço X'
+const message = service
 
 async function send() {
   try {
     const idMessage = await sendMessageFifo(service, attributes, message)
     console.log('Mensagem enviada, id: ' + idMessage)
   } catch (error) {
-    console.log(error.message)  
+    console.log(error)  
   }
 }
 

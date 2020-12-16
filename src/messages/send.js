@@ -14,16 +14,16 @@ async function sendMessageFifo(service, attributes, message) {
 
     const QueueUrl = `${process.env.QUEUE_URL}/${service}.fifo`
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             const idMessage = Date.now() + Math.random()
 
             const attrs = {}
 
             attributes.forEach(att => {
-                attrs[att.name] =  {
+                attrs[att.n] =  {
                     DataType: 'String',
-                    StringValue: String(att.value)
+                    StringValue: String(att.v)
                 }
             })
 
@@ -35,13 +35,21 @@ async function sendMessageFifo(service, attributes, message) {
                 MessageGroupId: "AC_",  
             }
 
-            sqs.sendMessage(params, function (error, data) {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve(data.MessageId)
-                }
-            })
+            const objSize = JSON.stringify(message).length;
+            
+            if(objSize > 256) {
+                throw `Mensagem maior que 256k -> ${objSize}k`
+            } else {
+                console.log(`Enviando... size: ${objSize}k`)
+    
+                sqs.sendMessage(params, function (error, data) {
+                    if (error) {
+                        reject(error.message)
+                    } else {
+                        resolve(data.MessageId)
+                    }
+                })
+            }
 
         } catch (error) {
             reject(error)
