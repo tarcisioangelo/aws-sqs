@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk')
 
+// Configurações da AWS
 AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
@@ -8,10 +9,13 @@ AWS.config.update({
 
 const sqs = new AWS.SQS({ apiVersion: process.env.API_VERSION })
 
-// const services = ['logger', 'user_person']
-
 async function sendMessageFifo(service, attributes, message) {
 
+    /**
+     * Construo a url de acordo com o nome do serviço (fila)
+     * Em especial estou usando a fila fifo
+     * Para entender leia a documentação da AWS
+     */
     const QueueUrl = `${process.env.QUEUE_URL}/${service}.fifo`
 
     return new Promise(async (resolve, reject) => {
@@ -20,6 +24,10 @@ async function sendMessageFifo(service, attributes, message) {
 
             const attrs = {}
 
+            /**
+             * Faço uma lógica para pegar os atributos do array
+             * e coloco no formato de objeto que é o padráo
+             */
             attributes.forEach(att => {
                 attrs[att.n] =  {
                     DataType: 'String',
@@ -35,19 +43,20 @@ async function sendMessageFifo(service, attributes, message) {
                 MessageGroupId: "AC_",  
             }
 
+            /**
+             * Aqui estou calculando o tamanho da mensage
+             * Por padrão não pode ser maior que 256k
+             */
             const objSize = JSON.stringify(message).length;
             
             if(objSize > 256) {
                 throw `Mensagem maior que 256k -> ${objSize}k`
             } else {
-                console.log(`Enviando... size: ${objSize}k`)
-    
                 sqs.sendMessage(params, function (error, data) {
-                    if (error) {
+                    if (error) 
                         reject(error.message)
-                    } else {
-                        resolve(data.MessageId)
-                    }
+                        
+                    resolve(data.MessageId)
                 })
             }
 

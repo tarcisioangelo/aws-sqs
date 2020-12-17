@@ -2,8 +2,10 @@ require('dotenv').config()
 
 const  { sendMessageFifo } = require('./messages')
 
-const service = 'user-logger'
+// Nome da minha fila
+const service = 'logger'
 
+// Atributos que estou passando na mensagem
 const attributes = [
   { n:'id', v: 1 },
   { n:'service', v: 'logger' },

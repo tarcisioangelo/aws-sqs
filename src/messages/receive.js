@@ -11,6 +11,11 @@ const sqs = new AWS.SQS({ apiVersion: process.env.API_VERSION })
 async function receiveMessage(service) {
     return new Promise((resolve, reject) => {
         try {
+            /**
+             * Construo a url de acordo com o nome do serviço (fila)
+             * Em especial estou usando a fila fifo
+             * Para entender leia a documentação da AWS
+             */
             const QueueUrl = `${process.env.QUEUE_URL}/${service}.fifo`
 
             const params = {
@@ -30,7 +35,6 @@ async function receiveMessage(service) {
                 } else {
                     reject('Nenhuma mensagem na fila')
                 }
-
             })
 
         } catch (error) {
