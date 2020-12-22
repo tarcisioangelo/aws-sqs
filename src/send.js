@@ -7,12 +7,12 @@ const service = 'logger'
 
 // Atributos que estou passando na mensagem
 const attributes = [
-  { n:'id', v: 1 },
-  { n:'service', v: 'logger' },
-  { n:'user', v: 3 },
-  { n:'url', v: '2434234.234324.234324.jpg' },
-  { n:'user', v: 'S' },
-  { n:'teste', v: 'N' },
+  { name:'id', value: 1 },
+  { name:'service', value: 'logger' },
+  { name:'user', value: 3 },
+  { name:'url', value: '2434234.234324.234324.jpg' },
+  { name:'user', value: 'S' },
+  { name:'teste', value: 'N' },
 ]
 
 const message = service

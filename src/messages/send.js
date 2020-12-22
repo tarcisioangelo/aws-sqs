@@ -29,9 +29,9 @@ async function sendMessageFifo(service, attributes, message) {
              * e coloco no formato de objeto que é o padráo
              */
             attributes.forEach(att => {
-                attrs[att.n] =  {
+                attrs[att.name] =  {
                     DataType: 'String',
-                    StringValue: String(att.v)
+                    StringValue: String(att.value)
                 }
             })
 
