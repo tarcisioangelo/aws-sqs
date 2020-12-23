@@ -1,28 +1,22 @@
 require("dotenv").config()
 
-const { subscribeMessage } = require("./messages")
+const { subscribe } = require("./messages")
 
-const service = "logger"
+/**
+ * @params
+ * service
+ * callback
+ */
+subscribe('logger', callback)
 
-// Atributos que quero pegar da mensagem
-const attributes = ["id", "service"]
-
-subscribeMessage(service, attributes, handleMessage)
-
-async function handleMessage(message) {
+async function callback(message) {
   return new Promise((resolve, reject) => {
     try {
-      /**
-       * A mensagem trás outras informações, estou pegando apenas os atributos
-       * id, title e o corpo da mensagem (body)
-       */
-       const obj = {
-        id: parseInt(message.MessageAttributes.id.StringValue),
-        title: message.MessageAttributes.service.StringValue,
-        message: message.Body,
-      }
+      if(!message) 
+        reject()
 
-      console.log(obj)
+
+      console.log(message)
       resolve()
 
     } catch (error) {

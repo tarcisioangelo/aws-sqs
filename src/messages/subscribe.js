@@ -19,7 +19,7 @@ const sqsConfig = {
   }
 }
 
-function subscribeMessage(service, attributes = [], callback) {
+function subscribe(service, callback) {
 
   /**
    * Construo a url de acordo com o nome do serviço (fila)
@@ -29,23 +29,38 @@ function subscribeMessage(service, attributes = [], callback) {
   const queueUrl = `${process.env.QUEUE_URL}/${service}.fifo`
   
   const app = Consumer.create({ 
-    queueUrl, 
-    handleMessage: callback, 
-    messageAttributeNames: attributes,
-    sqs: new AWS.SQS(sqsConfig)
+    queueUrl,  
+    sqs: new AWS.SQS(sqsConfig),
+    messageAttributeNames: ['All'],
+    handleMessage: (message => {
+      const items = JSON.parse(message.Body)
+
+      let obj = undefined
+      
+      if(Array.isArray(items)) {
+        obj = {}
+
+        items.forEach(value => {
+          var item = value.split(':');
+          obj[item[0]] = item[1]
+        })
+      }
+
+      return callback(obj)
+    }), 
   })
-    
+
   app.on('message_processed', (message) => console.log('Mensagem recebida com sucesso!'))
 
   app.on('error', (error) => console.error(error.message))
   
-  app.on('processing_error', (error) => console.error('Erro em processar a mensagem'))
+  app.on('processing_error', (error) => console.error(error))
   
   app.start()
   
   console.log(`** Recebendo mensagens da fila ${service}...`)
 }
 
-module.exports = { subscribeMessage }
+module.exports = { subscribe }
 
 

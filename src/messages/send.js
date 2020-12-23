@@ -9,7 +9,7 @@ AWS.config.update({
 
 const sqs = new AWS.SQS({ apiVersion: process.env.API_VERSION })
 
-async function sendMessageFifo(service, attributes, message) {
+async function sendMessageFifo(service, message, attributes = []) {
 
     /**
      * Construo a url de acordo com o nome do serviço (fila)
@@ -38,17 +38,17 @@ async function sendMessageFifo(service, attributes, message) {
             const params = {
                 QueueUrl,
                 MessageAttributes: attrs,
-                MessageBody: String(message),
+                MessageBody: JSON.stringify(message),
                 MessageDeduplicationId: String(idMessage),  
                 MessageGroupId: "AC_",  
             }
 
-            /**
-             * Aqui estou calculando o tamanho da mensage
-             * Por padrão não pode ser maior que 256k
-             */
+            // /**
+            //  * Aqui estou calculando o tamanho da mensage
+            //  * Por padrão não pode ser maior que 256k
+            //  */
             const objSize = JSON.stringify(message).length;
-            
+
             if(objSize > 256) {
                 throw `Mensagem maior que 256k -> ${objSize}k`
             } else {
@@ -56,7 +56,7 @@ async function sendMessageFifo(service, attributes, message) {
                     if (error) 
                         reject(error.message)
                         
-                    resolve(data.MessageId)
+                    resolve({ id: data.MessageId, size: `${objSize}k` })
                 })
             }
 
