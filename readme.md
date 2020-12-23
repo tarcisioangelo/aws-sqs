@@ -10,13 +10,13 @@ Para rodar você precisa ter o docker e docker compose instalados na sua máquin
 - docker-compose up -d
 
 # Comandos
-Para facilitar, coloquei no package.json os scripts para rodar o envio e o recebimento das mensagens, no recebimento estou usando o aws-sdk que fica lendo novas mensagens em tempo real.
+Para facilitar, coloquei no package.json os scripts para rodar o envio e o recebimento das mensagens, no recebimento estou usando o sqs-consumer que fica lendo novas mensagens em tempo real.
 
 - yarn sub
 - yarn send
 
 ### Criando fila
-- aws --endpoint-url=http://127.0.0.1:4100 sqs create-queue --queue-name myqueue
+- aws --endpoint-url=http://127.0.0.1:4100 sqs create-queue --queue-name myqueue.fifo
 
 ### Listando filas
 - aws --endpoint-url=http://127.0.0.1:4100 sqs list-queues

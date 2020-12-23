@@ -9,12 +9,16 @@ AWS.config.update({
   region: process.env.REGION 
 })
 
+/**
+ * Adicionando o httpOptions para manter uma conexão ativa
+ * Caso contrário ele ficará se conectando a cada requisição
+ */
 const sqsConfig = {
   apiVersion: process.env.API_VERSION,
   httpOptions: {
     agent: new https.Agent({
       keepAlive: true, 
-      maxSockets: Infinity // Infinity is read as 50 sockets
+      maxSockets: Infinity
     })
   }
 }
